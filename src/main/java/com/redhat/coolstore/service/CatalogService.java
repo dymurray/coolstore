@@ -3,25 +3,23 @@ package com.redhat.coolstore.service;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import com.redhat.coolstore.model.*;
 
-@Stateless
+@ApplicationScoped
 public class CatalogService {
 
     @Inject
-    Logger log;
-
-    @Inject
     private EntityManager em;
+
+    private static final Logger log = Logger.getLogger(CatalogService.class.getName());
 
     public CatalogService() {
     }
@@ -31,14 +29,17 @@ public class CatalogService {
         CriteriaQuery<CatalogItemEntity> criteria = cb.createQuery(CatalogItemEntity.class);
         Root<CatalogItemEntity> member = criteria.from(CatalogItemEntity.class);
         criteria.select(member);
+        log.info("Retrieving catalog items");
         return em.createQuery(criteria).getResultList();
     }
 
     public CatalogItemEntity getCatalogItemById(String itemId) {
+        log.info("Retrieving catalog item by id: " + itemId);
         return em.find(CatalogItemEntity.class, itemId);
     }
 
     public void updateInventoryItems(String itemId, int deducts) {
+        log.info("Updating inventory items for item id: " + itemId);
         InventoryEntity inventoryEntity = getCatalogItemById(itemId).getInventory();
         int currentQuantity = inventoryEntity.getQuantity();
         inventoryEntity.setQuantity(currentQuantity-deducts);
