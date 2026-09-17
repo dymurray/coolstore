@@ -1,0 +1,4 @@
+coolstore has been deployed.
+
+Get the application URL via OpenShift Route:
+  oc get route coolstore -o jsonpath='{.spec.host}'

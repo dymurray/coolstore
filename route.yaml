@@ -1,0 +1,23 @@
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: coolstore
+  labels:
+    helm.sh/chart: quickstart-java-service-0.2.0
+    app.kubernetes.io/name: coolstore
+    app.kubernetes.io/instance: coolstore
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+    konveyor.io/archetype: "quarkus"
+  annotations:
+    konveyor.io/source-repository: https://github.com/konveyor-ecosystem/coolstore
+spec:
+  to:
+    kind: Service
+    name: coolstore
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
